@@ -132,40 +132,65 @@ const Home = () => {
         </div>
 
         {/* Right Column: Class Details */}
-        <div className="col-md-5">
-          <h4 className="mb-3 text-success fw-bold">
-            Classes on {selectedDate}
-          </h4>
-          <div className="d-flex flex-column gap-3">
-            {classesOnDate.length === 0 ? (
-              <div className="card shadow-sm bg-light">
-                <div className="card-body text-center text-muted">
-                  No classes on this date.
-                </div>
-              </div>
-            ) : (
-              classesOnDate.map((cls) => (
-                <div key={cls.id} className="card shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title text-primary">{cls.subject}</h5>
-                    <p className="card-text mb-1">
-                      <strong>Time:</strong> {cls.time}
-                    </p>
-                    <p className="card-text mb-1">
-                      <strong>Room:</strong> {cls.room}
-                    </p>
-                    <p className="card-text mb-1">
-                      <strong>Faculty:</strong> {cls.faculty}
-                    </p>
-                    <p className="card-text mb-0">
-                      <strong>Days:</strong> {cls.days}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+        {/* Right Column: Class Details in Tailwind-like Format using Bootstrap */}
+<div className="col-md-5">
+  <h4 className="mb-3 text-success fw-bold">
+    Classes on {selectedDate}
+  </h4>
+  <div className="d-flex flex-column gap-3">
+    {classesOnDate.length === 0 ? (
+      <div className="card shadow-sm bg-light">
+        <div className="card-body text-center text-muted">
+          No classes on this date.
         </div>
+      </div>
+    ) : (
+      classesOnDate.map((cls) => {
+        const [day, month, year] = normalizeDate(cls.date).split("-");
+        const monthShort = new Date(`${month}/01/${year}`).toLocaleString('default', { month: 'short' }).toUpperCase();
+
+        return (
+          <a
+            key={cls.id}
+            href="#"
+            className="bg-white border rounded p-3 text-decoration-none text-dark shadow-sm hover-shadow transition"
+            style={{ borderColor: "#ddd" }}
+          >
+            <div className="d-flex gap-3">
+              {/* Date Badge */}
+              <div
+                className="d-flex flex-column align-items-center justify-content-center rounded text-white"
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: "#003366",
+                  flexShrink: 0,
+                }}
+              >
+                <span className="fw-bold fs-5">{day}</span>
+                <span className="text-uppercase small">{monthShort}</span>
+              </div>
+
+              {/* Class Info */}
+              <div className="flex-grow-1">
+                <h5 className="mb-1 fw-semibold text-primary">{cls.subject}</h5>
+                <p className="mb-1 small text-muted">
+                  <strong>Faculty:</strong> {cls.faculty}<br />
+                  <strong>Time:</strong> {cls.time}<br />
+                  <strong>Room:</strong> {cls.room}
+                </p>
+                <span className="small text-primary text-decoration-underline">
+                  View more →
+                </span>
+              </div>
+            </div>
+          </a>
+        );
+      })
+    )}
+  </div>
+</div>
+
       </div>
     </div>
   );
